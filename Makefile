@@ -2,7 +2,8 @@ CC := gcc
 EXEC_NAME := dmls
 C_SOURCES := $(wildcard src/*.c)
 C_OBJECTS := $(addprefix build/,$(C_SOURCES:.c=.o))
-C_FLAGS := -Wall
+C_INCLUDE_PATHS := src/
+C_FLAGS := -Wall -I $(C_INCLUDE_PATHS)
 LD_FLAGS := -Wall
 
 build: build/$(EXEC_NAME)
