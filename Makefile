@@ -15,4 +15,7 @@ build/%.o: %.c
 	$(CC) -c $(C_FLAGS) $< -o build/$*.o
 
 clean:
-	rm -rf build
+	rm -rf build/$(EXEC_NAME)
+
+distclean:
+	rm -rf build/
