@@ -15,6 +15,7 @@
 #include <string.h>
 #include <pwd.h>
 #include <grp.h>
+#include <time.h>
 
 static struct PermissionInferenceRule {
 	int32_t flags;
@@ -140,9 +141,16 @@ int dmls_iter_directory(const char *directory_name, DmlsOnIterDirectoryCb it_cb)
 
 void printf_dmls_dir_entry(const DmlsDirEntry *dmls_dir_entry)
 {
-	printf("%s  %d  %s  %s  %s\n", dmls_dir_entry->flags,
-		dmls_dir_entry->n_hard_links, (char *)dmls_dir_entry->owner_name,
-		(char *)dmls_dir_entry->owner_group_name, dmls_dir_entry->file_name);
+	char time_buf[64] = {0};
+	strftime((char *)time_buf, sizeof(time_buf), "%D %T",
+		gmtime(&dmls_dir_entry->modification_time_seconds));
+	printf("%s  %d  %s  %s  %d  %s  %s\n", dmls_dir_entry->flags,
+		dmls_dir_entry->n_hard_links,
+		(char *)dmls_dir_entry->owner_name,
+		(char *)dmls_dir_entry->owner_group_name,
+		dmls_dir_entry->file_size_bytes,
+		time_buf,
+		dmls_dir_entry->file_name);
 }
 
 static int dmls_dir_entry_init_with_stat(DmlsDirEntry *dmls_dir_entry, struct stat *st)
@@ -173,6 +181,8 @@ static int dmls_dir_entry_init_with_stat(DmlsDirEntry *dmls_dir_entry, struct st
 	}
 
 	dmls_dir_entry->n_hard_links = st->st_nlink;
+	dmls_dir_entry->file_size_bytes = st->st_size;
+	dmls_dir_entry->modification_time_seconds = st->st_mtime;
 
 	// Init owner name
 	{
