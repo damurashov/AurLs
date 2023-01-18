@@ -13,6 +13,8 @@
 #include <sys/stat.h>
 #include <stdint.h>
 #include <string.h>
+#include <pwd.h>
+#include <grp.h>
 
 static struct PermissionInferenceRule {
 	int32_t flags;
@@ -138,7 +140,9 @@ int dmls_iter_directory(const char *directory_name, DmlsOnIterDirectoryCb it_cb)
 
 void printf_dmls_dir_entry(const DmlsDirEntry *dmls_dir_entry)
 {
-	printf("%s %s\n", dmls_dir_entry->flags, dmls_dir_entry->file_name);
+	printf("%s  %d  %s  %s  %s\n", dmls_dir_entry->flags,
+		dmls_dir_entry->n_hard_links, (char *)dmls_dir_entry->owner_name,
+		(char *)dmls_dir_entry->owner_group_name, dmls_dir_entry->file_name);
 }
 
 static int dmls_dir_entry_init_with_stat(DmlsDirEntry *dmls_dir_entry, struct stat *st)
@@ -165,6 +169,34 @@ static int dmls_dir_entry_init_with_stat(DmlsDirEntry *dmls_dir_entry, struct st
 			dmls_dir_entry->flags[0] = 'd';
 		} else if (S_ISLNK(st->st_mode)) {
 			dmls_dir_entry->flags[0] = 'l';
+		}
+	}
+
+	dmls_dir_entry->n_hard_links = st->st_nlink;
+
+	// Init owner name
+	{
+		struct passwd *psswd = getpwuid(st->st_uid);
+
+		if (psswd == NULL) {
+			result = DmlsResultError;
+			dmls_set_error_message("Could not retrieve username");
+		} else {
+			snprintf((char *)dmls_dir_entry->owner_name,
+				sizeof(dmls_dir_entry->owner_name), "%s", psswd->pw_name);
+		}
+	}
+
+	// Init the owner group's name
+	{
+		struct group *gr = getgrgid(st->st_uid);
+
+		if (gr == NULL) {
+			result = DmlsResultError;
+			dmls_set_error_message("Could not retrieve group name");
+		} else {
+			snprintf((char *)dmls_dir_entry->owner_group_name,
+				sizeof(dmls_dir_entry->owner_group_name), "%s", gr->gr_name);
 		}
 	}
 
