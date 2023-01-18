@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <string.h>
 
-static const char *s_error_wrong_arguments = "Wrong arguments. Usage `dmls -l DIRECTORY";
+static const char *s_error_wrong_arguments = "Wrong arguments. Usage `dmls -la DIRECTORY";
 
 int dmls_arguments_init_with_sys(DmlsArguments *arguments, const char **args, int nargs)
 {
@@ -12,7 +12,7 @@ int dmls_arguments_init_with_sys(DmlsArguments *arguments, const char **args, in
 	int result = DmlsResultOk;
 
 	if (nargs == 2 || nargs == 3) {
-		if (strcmp(args[1], "-l") == 0) {
+		if (strcmp(args[1], "-la") == 0 || strcmp(args[1], "-al") == 0) {
 			arguments->flags = DmlsFlagsList;
 		} else {
 			result = DmlsResultError;

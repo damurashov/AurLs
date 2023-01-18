@@ -10,6 +10,7 @@
 
 typedef enum DmlsFlags {
 	DmlsFlagsList = 1 << 0,
+	DmlsFlagsAll = 1 << 1,
 } DmlsFlags;
 
 /// Result of argument parsing
