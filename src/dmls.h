@@ -9,7 +9,7 @@
 #define DMLS_DMLS_H_
 
 typedef enum DmlsResult {
-	DmlsResultOk,
+	DmlsResultOk = 0,
 	DmlsResultError,
 } DmlsResult;
 
