@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-static void dmls_dir_entry_init_with_stat(DmlsDirEntry *dmls_dir_entry, struct stat *st);
+static int dmls_dir_entry_init_with_stat(DmlsDirEntry *dmls_dir_entry, struct stat *st);
 
 int dmls_iter_directory(const char *directory_name, DmlsOnIterDirectoryCb it_cb)
 {
@@ -29,7 +29,9 @@ int dmls_iter_directory(const char *directory_name, DmlsOnIterDirectoryCb it_cb)
 
 				if (lstat(drnt->d_name, &st) == 0) {
 					DmlsDirEntry dmls_dir_entry;
-					dmls_dir_entry_init_with_stat(&dmls_dir_entry, &st);
+					if (dmls_dir_entry_init_with_stat(&dmls_dir_entry, &st) == DmlsResultOk) {
+						it_cb(&dmls_dir_entry);
+					}
 				}
 			}
 
@@ -44,8 +46,12 @@ int dmls_iter_directory(const char *directory_name, DmlsOnIterDirectoryCb it_cb)
 	return result;
 }
 
-static void dmls_dir_entry_init_with_stat(DmlsDirEntry *dmls_dir_entry, struct stat *st)
+static int dmls_dir_entry_init_with_stat(DmlsDirEntry *dmls_dir_entry, struct stat *st)
 {
+	int result = DmlsResultOk;
+
 	(void)dmls_dir_entry;
 	(void)st;
+
+	return result;
 }
