@@ -115,8 +115,8 @@ int dmls_iter_directory(const char *directory_name, DmlsOnIterDirectoryCb it_cb)
 
 				if (lstat(drnt->d_name, &st) == 0) {
 					DmlsDirEntry dmls_dir_entry;
-					dmls_dir_entry.file_name = drnt->d_name;
 					memset(&dmls_dir_entry, 0, sizeof(dmls_dir_entry));
+					dmls_dir_entry.file_name = drnt->d_name;
 
 					if (dmls_dir_entry_init_with_stat(&dmls_dir_entry, &st) == DmlsResultOk) {
 						it_cb(&dmls_dir_entry);
