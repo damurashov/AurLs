@@ -8,6 +8,11 @@
 #if !defined(DMLS_DMLS_H_)
 #define DMLS_DMLS_H_
 
+typedef enum DmlsResult {
+	DmlsResultOk,
+	DmlsResultError,
+} DmlsResult;
+
 const char *dmls_last_error_message();
 
 /// Sets static variable containing an error message.
