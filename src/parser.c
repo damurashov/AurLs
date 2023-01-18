@@ -20,6 +20,8 @@ int dmls_arguments_init_with_sys(DmlsArguments *arguments, const char **args, in
 
 		if (nargs == 3) {
 			arguments->directory = args[2];
+		} else {
+			arguments->directory = ".";
 		}
 	} else {
 		result = DmlsResultError;
