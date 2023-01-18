@@ -130,6 +130,7 @@ int dmls_iter_directory(const char *directory_name, DmlsOnIterDirectoryCb it_cb)
 		}
 	} else {
 		dmls_set_error_message("Unable to open directory");
+		result = DmlsResultError;
 	}
 
 	return result;
