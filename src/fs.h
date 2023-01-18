@@ -11,8 +11,8 @@
 typedef struct DmlsDirEntry {
 	char flags[10];
 	int n_hard_links;
-	const char *owner_name[32];  // Max. length is 32 char-s
-	const char *owner_group[32];  // Max. length is 32 char-s
+	const char *owner_name[33];  // Max. length is 32 char-s
+	const char *owner_group_name[33];  // Max. length is 32 char-s
 	int file_size_bytes;
 	const char *modification_timestring;
 	const char *file_name;
