@@ -11,14 +11,16 @@ int dmls_arguments_init_with_sys(DmlsArguments *arguments, const char **args, in
 	assert(arguments != NULL);
 	int result = DmlsResultOk;
 
-	if (nargs == 3) {
+	if (nargs == 2 || nargs == 3) {
 		if (strcmp(args[1], "-l") == 0) {
 			arguments->flags = DmlsFlagsList;
 		} else {
 			result = DmlsResultError;
 		}
 
-		arguments->directory = args[2];
+		if (nargs == 3) {
+			arguments->directory = args[2];
+		}
 	} else {
 		result = DmlsResultError;
 	}
