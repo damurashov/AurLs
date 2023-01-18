@@ -135,6 +135,11 @@ int dmls_iter_directory(const char *directory_name, DmlsOnIterDirectoryCb it_cb)
 	return result;
 }
 
+void printf_dmls_dir_entry(const DmlsDirEntry *dmls_dir_entry)
+{
+	printf("%s %s", dmls_dir_entry->flags, dmls_dir_entry->file_name);
+}
+
 static int dmls_dir_entry_init_with_stat(DmlsDirEntry *dmls_dir_entry, struct stat *st)
 {
 	int result = DmlsResultOk;
